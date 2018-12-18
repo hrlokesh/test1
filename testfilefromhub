@@ -1,3 +1,41 @@
 Hello
 
 ST466881B
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property name="file_name" value="SANUKCRM" />
+	<property name="logs_path" value="/var/opt/app1logs/crm/portfolio" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs_path}/${file_name}_traces.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{ISO8601} %level [%thread] %logger{0} - %msg%n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${logs_path}/${file_name}_traces-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10000KB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+
+<!-- Logs level commented. Should be defined for each environment when deploying
+--> 
+	<logger name="com.isb.neocrm.security" level="ERROR" additivity="false">
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="org.hibernate" level="ERROR" additivity="false">
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<root level="ERROR">
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>
